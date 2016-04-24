@@ -1,0 +1,35 @@
+{namespace neos=TYPO3\Neos\ViewHelpers}
+<f:layout name="BackendSubModule" />
+
+<f:section name="content">
+	<table class="neos-table">
+		<thead>
+			<tr>
+				<th>Package Name</th>
+				<th>Root Node</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<f:for each="{sites}" as="site">
+				<tr class="neos-folder">
+					<td class="neos-priority1" colspan="1">
+						{site.siteResourcesPackageKey}
+					</td>
+					<td colspan="1">
+						{site.nodeName}
+					</td>
+					<td class="neos-priority1 neos-aRight">
+						<f:link.action action="list" class="neos-button neos-button-primary" arguments="{sitePackageKey: site.siteResourcesPackageKey}"
+									   title="Show TypoScript">
+							Show TypoScript
+						</f:link.action>
+					</td>
+				</tr>
+			</f:for>
+		</tbody>
+	</table>
+	<div class="neos-footer">
+	</div>
+
+</f:section>

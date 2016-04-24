@@ -1,0 +1,11 @@
+privilegeTargets:
+  'TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
+    'Flowpack.TypoScript.Browser:AllActions':
+      matcher: 'method(Flowpack\TypoScript\Browser\Controller\TypoScriptController->.*Action())'
+
+roles:
+  'TYPO3.Neos:Administrator':
+    privileges:
+      -
+        privilegeTarget: 'Flowpack.TypoScript.Browser:AllActions'
+        permission: GRANT

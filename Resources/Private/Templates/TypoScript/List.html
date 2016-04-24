@@ -1,0 +1,157 @@
+{namespace neos=TYPO3\Neos\ViewHelpers}
+{namespace tsbrowser=Flowpack\TypoScript\Browser\ViewHelpers}
+<f:layout name="BackendSubModule"/>
+
+<f:section name="content">
+    <div class="neos-row">
+        <div class="neos-span2">
+            <div class="neos-control-group">
+                <div class="neos-controls">
+                    <input type="text" value="" id="browser-search" placeholder="Search" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ts-tree-container">
+        <ul id="root">
+            <f:for each="{typoScriptTree}" as="value" key="key">
+                <f:render section="keyValuePair" arguments="{_all}"/>
+            </f:for>
+        </ul>
+    </div>
+
+    <script type="text/javascript"><![CDATA[
+    $(function () {
+        $('#ts-tree-container').jstree({
+            plugins: ['search', 'conditionalselect'],
+            core: {
+                themes: {
+                    variant: 'dark',
+                    icons: false
+                }
+            },
+            conditionalselect: function (node, event) {
+                return false;
+            }
+        });
+        var to = false;
+        $('#browser-search').keyup(function () {
+            if (to) {
+                clearTimeout(to);
+            }
+            to = setTimeout(function () {
+                var v = $('#browser-search').val();
+                $('#ts-tree-container').jstree(true).search(v);
+            }, 250);
+        });
+    });
+    ]]></script>
+    <div class="neos-footer">
+    </div>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default-dark/style.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+</f:section>
+
+<f:section name="level">
+    <ul id="level{parentKeyChain -> tsbrowser:md5()}" class="collapse">
+        <f:for each="{elements}" as="value" key="key">
+            <f:render section="keyValuePair" arguments="{_all}" />
+        </f:for>
+    </ul>
+</f:section>
+
+<f:section name="keyValuePair">
+    <f:switch expression="{tsbrowser:variableType(variable: value)}">
+        <f:case value="array-eel">
+            <f:render section="simpleAssign" arguments="{key: key, value: value.__eelExpression, type: 'eel', parentKeyChain: parentKeyChain}"/>
+        </f:case>
+        <f:case value="array-value">
+            <f:render section="simpleAssign" arguments="{key: key, value: value.__value, type: '{tsbrowser:variableType(variable: value.__value)}', parentKeyChain: parentKeyChain}"/>
+        </f:case>
+        <f:case value="array-ts-object">
+            <f:render section="simpleAssign" arguments="{key: key, value: value.__objectType, type: 'ts-object', parentKeyChain: parentKeyChain}"/>
+        </f:case>
+        <f:case value="array-ts-object-overwrite">
+            <li id="prototype-{key -> tsbrowser:md5()}">
+                {key} = <code rel="value" class="text-success">{value.__objectType}</code>
+                <span style="margin-left: 10px;" class="neos-badge neos-badge-success">ts-object</span>
+                <f:render section="level" arguments="{elements: '{value -> tsbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
+            </li>
+        </f:case>
+        <f:case value="array-prototype">
+            <li id="prototype-{key -> tsbrowser:md5()}">
+                prototype(<code>{key}</code>)
+                <f:if condition="{value.__prototypeObjectName}">
+                    < prototype(<code>{value.__prototypeObjectName}</code>)
+                </f:if>
+                <span style="margin-left: 10px;" class="neos-badge neos-badge-primary">prototype</span>
+                <f:render section="level" arguments="{elements: '{value -> tsbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
+            </li>
+        </f:case>
+        <f:case value="array">
+            <f:if condition="{key} == '__meta'">
+                <f:then>
+                    <f:for each="{value}" as="subvalue" key="subkey">
+                        <f:render section="keyValuePair" arguments="{value: subvalue, key: '@{subkey}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}" />
+                    </f:for>
+                </f:then>
+                <f:else>
+                    <li>
+                        {key}
+                        <f:render section="level" arguments="{elements: value, parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
+                    </li>
+                </f:else>
+            </f:if>
+        </f:case>
+        <f:defaultCase>
+            <f:render section="simpleAssign" arguments="{key: key, value: value, type: '{tsbrowser:variableType(variable: value)}', parentKeyChain: parentKeyChain}"/>
+        </f:defaultCase>
+    </f:switch>
+</f:section>
+
+<f:section name="simpleAssign">
+    <li>
+        <f:render section="render-{type}" arguments="{type: type, key: key, value: value, parentKeyChain: '{parentKeyChain}.{key}'}" />
+    </li>
+</f:section>
+
+<f:section name="render-eel">
+    {key} = <code rel="value" class="text-warning"><![CDATA[${]]>{value}<![CDATA[}]]></code>
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-warning">{type}</span>
+</f:section>
+
+<f:section name="render-ts-object">
+    <a href="#prototype-{value -> tsbrowser:md5()}">
+        {key} = <code rel="value" class="text-success">{value}</code>
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-success">{type}</span></a>
+</f:section>
+
+<f:section name="render-string">
+    {key} = <code rel="value" class="text-info">{value}</code>
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
+</f:section>
+
+<f:section name="render-integer">
+    {key} = <code rel="value" class="text-info">{value}</code>
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
+</f:section>
+
+<f:section name="render-boolean">
+    {key} =
+    <f:if condition="{value}">
+        <f:then>
+            <span class="neos-label neos-label-info">TRUE</span>
+        </f:then>
+        <f:else>
+            <span class="neos-label neos-label-info">FALSE</span>
+        </f:else>
+    </f:if>
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
+</f:section>
+
+<f:section name="render-NULL">
+    {key} =
+    <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
+</f:section>

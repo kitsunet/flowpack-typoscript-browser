@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "type": "neos-package",
+    "name": "flowpack/typoscript-browser",
+    "require": {
+        "typo3/neos": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flowpack\\TypoScript\\Browser\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Flowpack.TypoScript.Browser"
+        }
+    }
+}

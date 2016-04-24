@@ -1,0 +1,10 @@
+-
+  requestFilter: 'parentRequest.isPackage("TYPO3.Neos") && isFormat("html") && isPackage("Flowpack.TypoScript.Browser") && isController("TypoScript")'
+  options:
+    layoutRootPaths:
+      'Flowpack.TypoScript.Browser': 'resource://Flowpack.TypoScript.Browser/Private/Layouts'
+      'TYPO3.Neos': 'resource://TYPO3.Neos/Private/Layouts'
+    partialRootPaths:
+      'Flowpack.TypoScript.Browser': 'resource://Flowpack.TypoScript.Browser/Private/Partials'
+      'TYPO3.Neos': 'resource://TYPO3.Neos/Private/Partials'
+

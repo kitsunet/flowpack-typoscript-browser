@@ -1,0 +1,11 @@
+TYPO3:
+  Neos:
+    modules:
+      administration:
+        submodules:
+          typoscript-browser:
+            label: 'TypoScript Browser'
+            controller: '\Flowpack\TypoScript\Browser\Controller\TypoScriptController'
+            description: ''
+            icon: 'icon-list'
+            privilegeTarget: 'Flowpack.TypoScript.Browser:AllActions'
