@@ -44,7 +44,7 @@ class TypoScriptController extends AbstractModuleController
         $sites = $this->siteRepository->findAll();
 
         if (count($sites) === 1) {
-//            $this->redirect('list', null, null, []);
+            $this->redirect('list', null, null, []);
         }
         $this->view->assign('sites', $sites);
     }
