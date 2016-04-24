@@ -82,9 +82,9 @@
         </f:case>
         <f:case value="array-prototype">
             <li id="prototype-{key -> tsbrowser:md5()}">
-                prototype(<code>{key}</code>)
+                <code>{key}</code>
                 <f:if condition="{value.__prototypeObjectName}">
-                    < prototype(<code>{value.__prototypeObjectName}</code>)
+                    < <code>{value.__prototypeObjectName}</code>
                 </f:if>
                 <span style="margin-left: 10px;" class="neos-badge neos-badge-primary">prototype</span>
                 <f:render section="level" arguments="{elements: '{value -> tsbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
