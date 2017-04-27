@@ -1,23 +1,24 @@
 <?php
-namespace Flowpack\TypoScript\Browser\Controller;
+namespace Flowpack\Fusion\Browser\Controller;
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Neos\Controller\Module\AbstractModuleController;
-use TYPO3\Neos\Domain\Repository\SiteRepository;
-use TYPO3\Neos\Domain\Service\ContentContext;
-use TYPO3\Neos\Domain\Service\TypoScriptService;
-use TYPO3\TYPO3CR\Domain\Service\ContextFactoryInterface;
+use Neos\ContentRepository\Domain\Service\ContextFactoryInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\View\ViewInterface;
+use Neos\Neos\Controller\Module\AbstractModuleController;
+use Neos\Neos\Domain\Repository\SiteRepository;
+use Neos\Neos\Domain\Service\ContentContext;
+use Neos\Neos\Domain\Service\FusionService;
 
 /**
  *
  */
-class TypoScriptController extends AbstractModuleController
+class FusionController extends AbstractModuleController
 {
     /**
      * @Flow\Inject
-     * @var TypoScriptService
+     * @var FusionService
      */
-    protected $typoScriptService;
+    protected $fusionService;
 
     /**
      * @Flow\Inject
@@ -31,13 +32,17 @@ class TypoScriptController extends AbstractModuleController
      */
     protected $siteRepository;
 
-    public function initializeView(\TYPO3\Flow\Mvc\View\ViewInterface $view)
+    /**
+     * @param ViewInterface $view
+     * @return void
+     */
+    public function initializeView(ViewInterface $view)
     {
         parent::initializeView($view);
     }
 
     /**
-     *
+     * @return void
      */
     public function indexAction()
     {
@@ -51,6 +56,7 @@ class TypoScriptController extends AbstractModuleController
 
     /**
      * @param string $sitePackageKey
+     * @return void
      */
     public function listAction($sitePackageKey = null)
     {
@@ -62,7 +68,7 @@ class TypoScriptController extends AbstractModuleController
 
         /** @var ContentContext $context */
         $context = $this->contextFactory->create(['currentSite' => $site]);
-        $typoScriptTree = $this->typoScriptService->getMergedTypoScriptObjectTree($context->getCurrentSiteNode());
-        $this->view->assign('typoScriptTree', $typoScriptTree);
+        $fusionTree = $this->fusionService->getMergedFusionObjectTree($context->getCurrentSiteNode());
+        $this->view->assign('fusionTree', $fusionTree);
     }
 }

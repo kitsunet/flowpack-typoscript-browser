@@ -1,11 +1,12 @@
-TYPO3:
+
+Neos:
   Neos:
     modules:
       administration:
         submodules:
-          typoscript-browser:
-            label: 'TypoScript Browser'
-            controller: '\Flowpack\TypoScript\Browser\Controller\TypoScriptController'
+          fusion-browser:
+            label: 'Fusion Browser'
+            controller: \Flowpack\Fusion\Browser\Controller\FusionController
             description: ''
-            icon: 'icon-list'
-            privilegeTarget: 'Flowpack.TypoScript.Browser:AllActions'
+            icon: icon-list
+            privilegeTarget: 'Flowpack.Fusion.Browser:AllActions'

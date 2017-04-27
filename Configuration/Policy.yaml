@@ -1,11 +1,11 @@
 privilegeTargets:
-  'TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
-    'Flowpack.TypoScript.Browser:AllActions':
-      matcher: 'method(Flowpack\TypoScript\Browser\Controller\TypoScriptController->.*Action())'
+  'Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
+    'Flowpack.Fusion.Browser:AllActions':
+      matcher: 'method(Flowpack\Fusion\Browser\Controller\FusionController->.*Action())'
 
 roles:
-  'TYPO3.Neos:Administrator':
+  'Neos.Neos:Administrator':
     privileges:
       -
-        privilegeTarget: 'Flowpack.TypoScript.Browser:AllActions'
+        privilegeTarget: 'Flowpack.Fusion.Browser:AllActions'
         permission: GRANT
