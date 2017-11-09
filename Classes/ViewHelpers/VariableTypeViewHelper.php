@@ -1,8 +1,8 @@
 <?php
-namespace Flowpack\TypoScript\Browser\ViewHelpers;
+namespace Flowpack\Fusion\Browser\ViewHelpers;
 
-use TYPO3\Flow\Utility\TypeHandling;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
+use Neos\Utility\TypeHandling;
 
 /**
  *
@@ -30,10 +30,10 @@ class VariableTypeViewHelper extends AbstractViewHelper
             return 'array-value';
         }
         if ($type === 'array' && isset($variable['__objectType']) && $variable['__objectType'] !== '' && count($variable) === 3) {
-            return 'array-ts-object';
+            return 'array-fusion-object';
         }
         if ($type === 'array' && isset($variable['__objectType']) && $variable['__objectType'] !== '' && count($variable) > 3) {
-            return 'array-ts-object-overwrite';
+            return 'array-fusion-object-overwrite';
         }
 
         return $type;

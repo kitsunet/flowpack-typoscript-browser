@@ -1,7 +1,7 @@
 <?php
-namespace Flowpack\TypoScript\Browser\ViewHelpers;
+namespace Flowpack\Fusion\Browser\ViewHelpers;
 
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
  *

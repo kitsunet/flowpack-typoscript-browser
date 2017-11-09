@@ -1,5 +1,5 @@
-{namespace neos=TYPO3\Neos\ViewHelpers}
-{namespace tsbrowser=Flowpack\TypoScript\Browser\ViewHelpers}
+{namespace neos=Neos\Neos\ViewHelpers}
+{namespace fusionbrowser=Flowpack\Fusion\Browser\ViewHelpers}
 <f:layout name="BackendSubModule"/>
 
 <f:section name="content">
@@ -13,9 +13,9 @@
         </div>
     </div>
 
-    <div id="ts-tree-container">
+    <div id="fusion-tree-container">
         <ul id="root">
-            <f:for each="{typoScriptTree}" as="value" key="key">
+            <f:for each="{fusionTree}" as="value" key="key">
                 <f:render section="keyValuePair" arguments="{_all}"/>
             </f:for>
         </ul>
@@ -23,7 +23,7 @@
 
     <script type="text/javascript"><![CDATA[
     $(function () {
-        $('#ts-tree-container').jstree({
+        $('#fusion-tree-container').jstree({
             plugins: ['search', 'conditionalselect'],
             core: {
                 themes: {
@@ -42,7 +42,7 @@
             }
             to = setTimeout(function () {
                 var v = $('#browser-search').val();
-                $('#ts-tree-container').jstree(true).search(v);
+                $('#fusion-tree-container').jstree(true).search(v);
             }, 250);
         });
     });
@@ -55,7 +55,7 @@
 </f:section>
 
 <f:section name="level">
-    <ul id="level{parentKeyChain -> tsbrowser:md5()}" class="collapse">
+    <ul id="level{parentKeyChain -> fusionbrowser:md5()}" class="collapse">
         <f:for each="{elements}" as="value" key="key">
             <f:render section="keyValuePair" arguments="{_all}" />
         </f:for>
@@ -63,31 +63,31 @@
 </f:section>
 
 <f:section name="keyValuePair">
-    <f:switch expression="{tsbrowser:variableType(variable: value)}">
+    <f:switch expression="{fusionbrowser:variableType(variable: value)}">
         <f:case value="array-eel">
             <f:render section="simpleAssign" arguments="{key: key, value: value.__eelExpression, type: 'eel', parentKeyChain: parentKeyChain}"/>
         </f:case>
         <f:case value="array-value">
-            <f:render section="simpleAssign" arguments="{key: key, value: value.__value, type: '{tsbrowser:variableType(variable: value.__value)}', parentKeyChain: parentKeyChain}"/>
+            <f:render section="simpleAssign" arguments="{key: key, value: value.__value, type: '{fusionbrowser:variableType(variable: value.__value)}', parentKeyChain: parentKeyChain}"/>
         </f:case>
-        <f:case value="array-ts-object">
-            <f:render section="simpleAssign" arguments="{key: key, value: value.__objectType, type: 'ts-object', parentKeyChain: parentKeyChain}"/>
+        <f:case value="array-fusion-object">
+            <f:render section="simpleAssign" arguments="{key: key, value: value.__objectType, type: 'fusion-object', parentKeyChain: parentKeyChain}"/>
         </f:case>
-        <f:case value="array-ts-object-overwrite">
-            <li id="prototype-{key -> tsbrowser:md5()}">
+        <f:case value="array-fusion-object-overwrite">
+            <li id="prototype-{key -> fusionbrowser:md5()}">
                 {key} = <code rel="value" class="text-success">{value.__objectType}</code>
-                <span style="margin-left: 10px;" class="neos-badge neos-badge-success">ts-object</span>
-                <f:render section="level" arguments="{elements: '{value -> tsbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
+                <span style="margin-left: 10px;" class="neos-badge neos-badge-success">fusion-object</span>
+                <f:render section="level" arguments="{elements: '{value -> fusionbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
             </li>
         </f:case>
         <f:case value="array-prototype">
-            <li id="prototype-{key -> tsbrowser:md5()}">
+            <li id="prototype-{key -> fusionbrowser:md5()}">
                 <code>{key}</code>
                 <f:if condition="{value.__prototypeObjectName}">
                     < <code>{value.__prototypeObjectName}</code>
                 </f:if>
                 <span style="margin-left: 10px;" class="neos-badge neos-badge-primary">prototype</span>
-                <f:render section="level" arguments="{elements: '{value -> tsbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
+                <f:render section="level" arguments="{elements: '{value -> fusionbrowser:removeHiddenMeta()}', parentKey: key, parentKeyChain: '{parentKeyChain}.{key}'}"/>
             </li>
         </f:case>
         <f:case value="array">
@@ -106,7 +106,7 @@
             </f:if>
         </f:case>
         <f:defaultCase>
-            <f:render section="simpleAssign" arguments="{key: key, value: value, type: '{tsbrowser:variableType(variable: value)}', parentKeyChain: parentKeyChain}"/>
+            <f:render section="simpleAssign" arguments="{key: key, value: value, type: '{fusionbrowser:variableType(variable: value)}', parentKeyChain: parentKeyChain}"/>
         </f:defaultCase>
     </f:switch>
 </f:section>
@@ -122,8 +122,8 @@
     <span style="margin-left: 10px;" class="neos-badge neos-badge-warning">{type}</span>
 </f:section>
 
-<f:section name="render-ts-object">
-    <a href="#prototype-{value -> tsbrowser:md5()}">
+<f:section name="render-fusion-object">
+    <a href="#prototype-{value -> fusionbrowser:md5()}">
         {key} = <code rel="value" class="text-success">{value}</code>
     <span style="margin-left: 10px;" class="neos-badge neos-badge-success">{type}</span></a>
 </f:section>
@@ -142,16 +142,16 @@
     {key} =
     <f:if condition="{value}">
         <f:then>
-            <span class="neos-label neos-label-info">TRUE</span>
+            <span class="neos-label neos-label-info">true</span>
         </f:then>
         <f:else>
-            <span class="neos-label neos-label-info">FALSE</span>
+            <span class="neos-label neos-label-info">false</span>
         </f:else>
     </f:if>
     <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
 </f:section>
 
-<f:section name="render-NULL">
+<f:section name="render-null">
     {key} =
     <span style="margin-left: 10px;" class="neos-badge neos-badge-info">{type}</span>
 </f:section>
